@@ -6,17 +6,15 @@ import { AiOutlineMenu } from "react-icons/ai";
 
 import Avatar from "../Avatar";
 import MenuItem from "./MenuItem";
-import useRegisterModal from "@/app/hooks/useRegisterModal";
-import useLoginModel from "@/app/hooks/useLoginModal";
-import { User } from "@prisma/client";
+import { SafeUser } from "@/app/types";
+import useRegisterLoginModel from "@/app/hooks/useRegisterLoginModal";
 
 interface UserMenuProps {
-  currentUser?: User | null;
+  currentUser?: SafeUser | null;
 }
 
 const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
-  const registerModal = useRegisterModal();
-  const loginModal = useLoginModel();
+  const registerLoginModal = useRegisterLoginModel();
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -53,7 +51,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
         >
           <AiOutlineMenu />
           <div className="hidden md:block">
-            <Avatar />
+            <Avatar src={currentUser?.image} />
           </div>
         </div>
       </div>
@@ -72,8 +70,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
               </>
             ) : (
               <>
-                <MenuItem onClick={loginModal.onOpen} label="Login" />
-                <MenuItem onClick={registerModal.onOpen} label="Sign up" />
+                <MenuItem
+                  onClick={registerLoginModal.onLoginOpen}
+                  label="Login"
+                />
+                <MenuItem
+                  onClick={registerLoginModal.onRegisterOpen}
+                  label="Sign up"
+                />
               </>
             )}
           </div>

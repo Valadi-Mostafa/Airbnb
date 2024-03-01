@@ -2,14 +2,12 @@
 
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { AiFillGithub } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
+// import { FcGoogle } from "react-icons/fc";
 
-import useRegisterModal from "@/app/hooks/useRegisterModal";
-import useLoginModel from "@/app/hooks/useLoginModal";
+import useRegisterLoginModel from "@/app/hooks/useRegisterLoginModal";
 import Modal from "./Modal";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
@@ -18,8 +16,7 @@ import Button from "../Button";
 
 const LoginModal = () => {
   const router = useRouter();
-  const registerModal = useRegisterModal();
-  const loginModal = useLoginModel();
+  const loginModal = useRegisterLoginModel();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -42,7 +39,7 @@ const LoginModal = () => {
       if (callback?.ok) {
         toast.success("Logged in");
         router.refresh();
-        loginModal.onClose();
+        loginModal.onLoginClose();
       }
 
       if (callback?.error) {
@@ -77,26 +74,26 @@ const LoginModal = () => {
   const footerContent = (
     <div className="flex flex-col gap-4 mt-3">
       <hr />
-      <Button
+      {/* <Button
         outline
         label="Continue with Google"
         icon={FcGoogle}
-        onClick={() => {}}
-      />
+        onClick={() => signIn("google")}
+      /> */}
       <Button
         outline
         label="Continue with Github"
         icon={AiFillGithub}
-        onClick={() => {}}
+        onClick={() => signIn("github")}
       />
       <div className="text-neutral-500 text-center mt-4 font-light">
         <div className="justify-center flex flex-row items-center gap-2">
-          <div>Already have an account?</div>
+          <div>Don't you have an account?</div>
           <div
-            onClick={registerModal.onClose}
+            onClick={loginModal.onRegisterOpenLoginClose}
             className="text-neutral-800 cursor-pointer hover:underline"
           >
-            Log in
+            Sign in
           </div>
         </div>
       </div>
@@ -106,10 +103,10 @@ const LoginModal = () => {
   return (
     <Modal
       disabled={isLoading}
-      isOpen={loginModal.isOpen}
+      isOpen={loginModal.isLoginOpen}
       title="Login"
       actionLabel="Continue"
-      onClose={loginModal.onClose}
+      onClose={loginModal.onLoginClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
       footer={footerContent}
