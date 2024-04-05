@@ -40,6 +40,7 @@ const RegisterModal = () => {
       .then(() => {
         toast.success("You signed up successfully");
         registerModal.onClose();
+        loginModal.onOpen();
       })
       .catch((error) => toast.error("Something went wrong."))
       .finally(() => {
