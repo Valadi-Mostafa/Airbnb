@@ -4,6 +4,7 @@ import prisma from "@/app/libs/prismadb";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 
 export async function POST(request: Request) {
+  try {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
@@ -39,4 +40,7 @@ export async function POST(request: Request) {
   });
 
   return NextResponse.json(listing);
+  } catch(error) {
+    return NextResponse.error()
+  }
 }
